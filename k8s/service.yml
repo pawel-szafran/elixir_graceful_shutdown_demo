@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: calc
+  labels:
+    app: calc
+spec:
+  type: LoadBalancer
+  selector:
+    app: calc
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 4000
