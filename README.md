@@ -6,7 +6,7 @@ in Elixir - try not to drop the ball".
 
 ## Versions
 
-### `v1` - simple calc API
+### `v1` - Simple calc API
 
 Dead simple calc API with a single `sum` endpoint, which slowly adds the numbers
 (100ms sleep). Deployed to k8s with very min config.
@@ -14,6 +14,13 @@ Dead simple calc API with a single `sum` endpoint, which slowly adds the numbers
 Problems:
 - Failures when deploying
 - Failures when scaling up
+
+### `v2` - Fix scaling up
+
+Tell k8s when pod is ready to accept HTTP traffic by creating `Health` plug and
+defining k8s readiness and liveness probes.
+
+No failures, because containers ignore `SIGTERM` and are killed after 30s.
 
 ## How to
 
