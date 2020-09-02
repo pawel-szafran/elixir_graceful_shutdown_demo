@@ -7,6 +7,8 @@ defmodule CalcWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  plug CalcWeb.Plug.Health
+
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
