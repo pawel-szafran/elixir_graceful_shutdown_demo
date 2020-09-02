@@ -6,6 +6,11 @@ metadata:
     app: calc
 spec:
   replicas: 13
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 5
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: calc
@@ -18,5 +23,19 @@ spec:
         - name: calc
           image: registry.digitalocean.com/pawel-szafran/calc:CALC_VERSION
           ports:
-            - containerPort: 4000
+            - name: http
+              containerPort: 4000
               protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - /app/bin/calc
+                - pid
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
