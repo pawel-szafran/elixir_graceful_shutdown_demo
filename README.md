@@ -29,6 +29,13 @@ Directly call `calc start`. Setup task like DB migrations should be done with k8
 Problems:
 - Still few failures when deploying: EOF, 502
 
+### `v4` - Simulate Phoenix before 1.5
+
+Phoenix 1.5 comes by default with `Plug.Cowboy.Drainer`. To simulate behavior before that, we can configure `Endpoint` with `drainer: false`.
+
+Problems:
+- Few times more failures when deploying than in `v3`: EOF, 502
+
 ## How to
 
 ### Play locally
