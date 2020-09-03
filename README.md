@@ -36,6 +36,12 @@ Phoenix 1.5 comes by default with `Plug.Cowboy.Drainer`. To simulate behavior be
 Problems:
 - Few times more failures when deploying than in `v3`: EOF, 502
 
+### `v5` - Add pre-stop delay
+
+Give k8s time to remove Pod from Endpoints, before sending SIGTERM to Elixir (`preStop` hook)
+
+No failures for both HTTPS and HTTP2 :rocket:
+
 ## How to
 
 ### Play locally
