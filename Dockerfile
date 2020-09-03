@@ -44,8 +44,6 @@ RUN apk add --update --no-cache bash openssl
 WORKDIR /app
 
 COPY --from=build /build/_build/prod/rel/calc ./
-COPY bin/start.sh start.sh
-RUN chmod 755 start.sh
 
 RUN addgroup -S app && adduser -S app -G app
 RUN chown -R app:app /app
@@ -53,4 +51,4 @@ USER app
 
 EXPOSE 4000
 
-CMD ["/app/start.sh"]
+CMD ["/app/bin/calc", "start"]

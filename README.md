@@ -12,15 +12,22 @@ Dead simple calc API with a single `sum` endpoint, which slowly adds the numbers
 (100ms sleep). Deployed to k8s with very min config.
 
 Problems:
-- Failures when deploying
-- Failures when scaling up
+- Failures when deploying: 503
+- Failures when scaling up: 503
 
 ### `v2` - Fix scaling up
 
-Tell k8s when pod is ready to accept HTTP traffic by creating `Health` plug and
-defining k8s readiness and liveness probes.
+Tell k8s when a pod is ready to accept HTTP traffic, i.e. create `Health` plug and
+define k8s readiness and liveness probes.
 
 No failures, because containers ignore `SIGTERM` and are killed after 30s.
+
+### `v3` - Pass SIGTERM to Elixir app
+
+Directly call `calc start`. Setup task like DB migrations should be done with k8s Init Containers or Tasks.
+
+Problems:
+- Still few failures when deploying: EOF, 502
 
 ## How to
 
