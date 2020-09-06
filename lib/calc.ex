@@ -6,6 +6,7 @@ defmodule Calc do
     Logger.info("Calculating sum of #{inspect(numbers)}")
     sum = SlowMath.sum(numbers)
     Logger.info("Sum is #{sum}")
+    Calc.Log.publish_async(:sum, numbers, sum)
     sum
   end
 end

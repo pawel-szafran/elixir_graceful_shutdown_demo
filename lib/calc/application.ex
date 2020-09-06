@@ -3,6 +3,7 @@ defmodule Calc.Application do
 
   def start(_type, _args) do
     children = [
+      {Finch, name: CalcFinch},
       CalcWeb.Telemetry,
       CalcWeb.Endpoint
     ]

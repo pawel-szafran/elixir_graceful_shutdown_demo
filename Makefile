@@ -6,7 +6,8 @@
 	do-create-registry do-create-k8s-cluster do-add-registry-to-k8s-cluster \
 	do-create-load-test-vm do-load-test do-create-cert do-delete \
 	docker-local-server docker-push-image \
-	k8s-logs k8s-apply-deployment k8s-deploy k8s-redeploy k8s-test k8s-delete
+	k8s-logs k8s-apply-deployment k8s-deploy k8s-redeploy k8s-test k8s-delete \
+	influxdb-local influxdb-count influxdb-clear influxdb-k8s-deploy influxdb-k8s-port-forward
 
 help:
 	@grep -E '^[a-zA-Z1-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -103,7 +104,9 @@ do-delete: ## DigitalOcean: Delete all resources
 
 docker-local-server: ## Docker: Run local 
 	docker build -t calc .
-	docker run -it --rm --name calc -p 4000:4000 calc
+	docker run -it --rm --name calc -p 4000:4000 \
+		-e INFLUXDB_BASE_URL=http://docker.for.mac.localhost:8086 \
+		calc
 
 docker-push-image: .make.do-registry ## Docker: Build and push image to registry
 	$(if $(v), , $(error "Specify version, e.g.: v=0.1.0"))
@@ -142,3 +145,26 @@ k8s-delete: ## k8s: Delete resources
 	-kubectl delete service/calc
 	-kubectl delete deployment/calc
 	rm -f .make.k8s-*
+
+# InfluxDB
+
+influxdb-local:
+	docker run -it --rm --name influxdb -p 8086:8086 \
+  	-e INFLUXDB_DB=calc \
+  	influxdb:1.8.2-alpine
+
+influxdb-k8s-deploy:
+	kubectl apply -f k8s/influxdb.yml
+
+influxdb-k8s-port-forward:
+	kubectl port-forward service/influxdb 8086:8086
+
+influxdb-count:
+	curl -Gs 'http://localhost:8086/query?db=calc' \
+		--data-urlencode 'q=select count(result) from operation' \
+		| jq '.results[0].series[0].values[0][1]'
+
+influxdb-clear:
+	curl -XPOST 'http://localhost:8086/query?db=calc' \
+    --data-urlencode 'q=delete from operation' \
+		-s -o /dev/null

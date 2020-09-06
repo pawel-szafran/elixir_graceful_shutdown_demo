@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :calc, CalcWeb.Endpoint,
   code_reloader: true,
@@ -11,3 +11,5 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :calc, Calc.Log, influxdb_base_url: "http://localhost:8086"

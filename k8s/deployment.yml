@@ -26,6 +26,9 @@ spec:
             - name: http
               containerPort: 4000
               protocol: TCP
+          env:
+            - name: INFLUXDB_BASE_URL
+              value: http://influxdb:8086
           livenessProbe:
             exec:
               command:

@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :calc, CalcWeb.Endpoint, server: true
 

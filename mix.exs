@@ -31,7 +31,8 @@ defmodule Calc.MixProject do
       {:telemetry_metrics, "~> 0.5"},
       {:telemetry_poller, "~> 0.5"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.3"}
+      {:plug_cowboy, "~> 2.3"},
+      {:finch, "~> 0.3.1"}
     ]
   end
 

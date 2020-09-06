@@ -3,7 +3,7 @@ import { check } from 'k6';
 
 export let options = {
   vus: 500,
-  duration: '5m',
+  duration: '2m',
   noVUConnectionReuse: true,
   discardResponseBodies: true,
   noUsageReport: true,

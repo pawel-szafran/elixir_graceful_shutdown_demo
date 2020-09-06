@@ -17,30 +17,41 @@ Problems:
 
 ### `v2` - Fix scaling up
 
-Tell k8s when a pod is ready to accept HTTP traffic, i.e. create `Health` plug and
-define k8s readiness and liveness probes.
+Tell k8s when a pod is ready to accept HTTP traffic, i.e. create `Health` plug
+and define k8s readiness and liveness probes.
 
 No failures, because containers ignore `SIGTERM` and are killed after 30s.
 
 ### `v3` - Pass SIGTERM to Elixir app
 
-Directly call `calc start`. Setup task like DB migrations should be done with k8s Init Containers or Tasks.
+Directly call `calc start`. Setup task like DB migrations should be done with
+k8s Init Containers or Tasks.
 
 Problems:
 - Still few failures when deploying: EOF, 502
 
 ### `v4` - Simulate Phoenix before 1.5
 
-Phoenix 1.5 comes by default with `Plug.Cowboy.Drainer`. To simulate behavior before that, we can configure `Endpoint` with `drainer: false`.
+Phoenix 1.5 comes by default with `Plug.Cowboy.Drainer`. To simulate behavior
+before that, we can configure `Endpoint` with `drainer: false`.
 
 Problems:
 - Few times more failures when deploying than in `v3`: EOF, 502
 
 ### `v5` - Add pre-stop delay
 
-Give k8s time to remove Pod from Endpoints, before sending SIGTERM to Elixir (`preStop` hook)
+Give k8s time to remove Pod from Endpoints, before sending SIGTERM to Elixir
+(`preStop` hook)
 
 No failures for both HTTPS and HTTP2 :rocket:
+
+### `v6` - Log claculations using `Task`
+
+For each calculation start a `Task` that sleeps for 5s and then sends operation
+log to InfluxDB over HTTP.
+
+Problems:
+- Failures when deploying: more than 4% of calculations are not logged
 
 ## How to
 
@@ -122,7 +133,8 @@ make k8s-logs
 
 ### Load test k8s deployment
 
-Create load test VM and install load testing tool [`k6`](https://k6.io/docs/):
+Create load test VM and install load testing tool [`k6`](https://k6.io/docs/)
+(retry if installing `k6` fails):
 ```
 make do-create-load-test-vm
 ```
@@ -189,6 +201,35 @@ make docker-push-image v=0.1.1
 
 make k8s-deploy v=0.1.0
 make k8s-deploy v=0.1.1
+```
+
+### Test async calculation-logging to InfluxDB - from `v6`
+
+Run InfluxDB locally:
+```
+make influxdb-local
+```
+
+Deploy InfluxDB to k8s:
+```
+make influxdb-k8s-deploy
+```
+
+Forward local port to InfluxDB k8s service:
+```
+make influxdb-k8s-port-forward
+```
+
+Count operations in InfluxDB (local or k8s with port-forward):
+```
+make influxdb-count
+# or
+watch -n 3 make influxdb-count
+```
+
+Clear operations in InfluxDB (local or k8s with port-forward):
+```
+make influxdb-clear
 ```
 
 ### Clean up
