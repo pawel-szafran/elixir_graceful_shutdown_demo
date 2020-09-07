@@ -47,7 +47,7 @@ do-create-registry: .make.do-registry  ## DigitalOcean: Create registry
 .make.do-k8s-cluster:
 	doctl kubernetes cluster create graceful-shutdown-demo \
 		--region fra1 \
-		--node-pool "name=k8s;size=s-2vcpu-2gb;count=3"
+		--node-pool "name=k8s;size=s-2vcpu-2gb;count=7"
 	touch .make.do-k8s-cluster
 
 do-create-k8s-cluster: .make.do-k8s-cluster  ## DigitalOcean: Create k8s cluster

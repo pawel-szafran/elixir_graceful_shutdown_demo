@@ -51,7 +51,7 @@ For each calculation start a `Task` that sleeps for 5s and then sends operation
 log to InfluxDB over HTTP.
 
 Problems:
-- Failures when deploying: more than 4% of calculations are not logged
+- Failures when deploying: calculations not logged
 
 ## How to
 
@@ -87,7 +87,7 @@ Create DO Docker container repository, e.g.:
 make do-create-registry name=pawel-szafran
 ```
 
-Create k8s cluster with 3 nodes in Frankfurt:
+Create k8s cluster with 7 nodes in Frankfurt:
 ```
 make do-create-k8s-cluster
 ```

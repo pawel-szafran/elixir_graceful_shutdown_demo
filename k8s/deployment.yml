@@ -9,7 +9,7 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 5
+      maxSurge: 3
       maxUnavailable: 0
   selector:
     matchLabels:
@@ -34,13 +34,13 @@ spec:
               command:
                 - /app/bin/calc
                 - pid
-            initialDelaySeconds: 2
+            initialDelaySeconds: 10
             periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 3
+            initialDelaySeconds: 20
             periodSeconds: 5
           lifecycle:
             preStop:
