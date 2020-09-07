@@ -19,6 +19,7 @@ defmodule Calc.Log.Server do
 
   @impl true
   def init(:ok) do
+    Process.flag(:trap_exit, true)
     {:ok, %{logs: {0, []}, timer: schedule_publishing()}}
   end
 
@@ -38,6 +39,11 @@ defmodule Calc.Log.Server do
   def handle_info(:publish, %{logs: {size, logs}}) do
     do_publish(size, logs)
     {:noreply, %{logs: {0, []}, timer: schedule_publishing()}}
+  end
+
+  @impl true
+  def terminate(_reason, %{logs: {size, logs}}) do
+    do_publish(size, logs)
   end
 
   defp schedule_publishing do

@@ -64,6 +64,10 @@ Send calculation to InfluxDB in batches of 500 or every 30s.
 Problems:
 - Failures when deploying: calculations not logged
 
+### `v9` - Add graceful shutdown for batching
+
+All calculations are logged when deploying :rocket:
+
 ## How to
 
 ### Play locally
