@@ -45,7 +45,7 @@ Give k8s time to remove Pod from Endpoints, before sending SIGTERM to Elixir
 
 No failures for both HTTPS and HTTP2 :rocket:
 
-### `v6` - Log claculations using `Task`
+### `v6` - Log calculations using `Task`
 
 For each calculation start a `Task` that sleeps for 5s and then sends operation
 log to InfluxDB over HTTP.
@@ -56,6 +56,13 @@ Problems:
 ### `v7` - Add graceful shutdown for `Task`
 
 All calculations are logged when deploying :rocket:
+
+### `v8` - Log calculations in batches
+
+Send calculation to InfluxDB in batches of 500 or every 30s.
+
+Problems:
+- Failures when deploying: calculations not logged
 
 ## How to
 
