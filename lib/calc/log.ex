@@ -1,13 +1,33 @@
 defmodule Calc.Log do
+  use Supervisor
   require Logger
+
+  def start_link(args) do
+    Supervisor.start_link(__MODULE__, args, name: __MODULE__)
+  end
+
+  @impl true
+  def init(_args) do
+    children = [
+      {Finch, name: __MODULE__.Finch},
+      {Task.Supervisor, name: __MODULE__.Task.Supervisor}
+    ]
+
+    Supervisor.init(children, strategy: :one_for_one)
+  end
 
   def publish_async(op, numbers, result) do
     Logger.info("Logging operation... ")
     numbers = length(numbers)
 
-    Task.start(fn ->
-      publish(op, numbers, result)
-    end)
+    Task.Supervisor.start_child(
+      __MODULE__.Task.Supervisor,
+      fn ->
+        Process.flag(:trap_exit, true)
+        publish(op, numbers, result)
+      end,
+      shutdown: 7_000
+    )
   end
 
   defp publish(op, numbers, result) do
@@ -17,7 +37,7 @@ defmodule Calc.Log do
 
   defp write_to_influxdb(log) do
     Finch.build(:post, influxdb_url("/write?db=calc"), [], log)
-    |> Finch.request(CalcFinch)
+    |> Finch.request(__MODULE__.Finch)
     |> parse_response()
   end
 

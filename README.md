@@ -53,6 +53,10 @@ log to InfluxDB over HTTP.
 Problems:
 - Failures when deploying: calculations not logged
 
+### `v7` - Add graceful shutdown for `Task`
+
+All calculations are logged when deploying :rocket:
+
 ## How to
 
 ### Play locally
