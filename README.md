@@ -4,6 +4,8 @@ Demo app for my [Code BEAM
 V](https://codesync.global/conferences/code-beam-sto/) talk "Graceful shutdown
 in Elixir - try not to drop the ball".
 
+[Slides](slides.pdf)
+
 ## Versions
 
 ### `v1` - Simple calc API
